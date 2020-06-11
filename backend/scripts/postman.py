@@ -2,7 +2,7 @@ import requests
 
 url = "http://localhost:5000/wallet/transact"
 
-payload = "{\"recipient\":\"foo\",\"amount\":15}"
+payload = "{\"recipient\":\"bar\",\"amount\":95}"
 headers = {
     'Content-Type': 'application/json'
 }
