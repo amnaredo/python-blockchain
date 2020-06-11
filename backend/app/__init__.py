@@ -29,6 +29,20 @@ def route_blockchain():
     return jsonify(blockchain.to_json())
 
 
+@app.route('/blockchain/range')
+def route_blockchain_range():
+    # http://localhost:5000/blockchain/range?start=2&end=5
+    start = int(request.args.get('start'))
+    end = int(request.args.get('end'))
+
+    return jsonify(blockchain.to_json()[::-1][start:end])  # reverse the list
+
+
+@app.route('/blockchain/length')
+def route_blockchain_length():
+    return jsonify(len(blockchain.chain))
+
+
 @app.route('/blockchain/mine')
 def route_blockchain_mine():
     transaction_data = transaction_pool.transaction_data()
@@ -84,5 +98,13 @@ if os.environ.get('PEER') == 'True':
     except Exception as e:
         print(f'\n -- Error synchronizing: {e}')
 
+if os.environ.get('SEED_DATA') == 'True':
+    for i in range(10):
+        blockchain.add_block([
+            Transaction(Wallet(), Wallet().address,
+                        random.randint(2, 50)).to_json(),
+            Transaction(Wallet(), Wallet().address,
+                        random.randint(2, 50)).to_json()
+        ])
 
 app.run(port=PORT)
